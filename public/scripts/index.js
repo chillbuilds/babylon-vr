@@ -18,22 +18,28 @@ window.addEventListener('DOMContentLoaded', () => {
 var createScene = function () {
   scene = new BABYLON.Scene(engine)
 
-  var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene)
-  camera.setTarget(BABYLON.Vector3.Zero())
+  var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 1, -3), scene)
+//   camera.setTarget(new BABYLON.Vector3(0, 0, 0))
   camera.attachControl(canvas, true)
 
   var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene)
   light.intensity = 0.7
 
-  // Await model loading, but don't return the promise directly
-  BABYLON.SceneLoader.AppendAsync('/assets/models/', 'train.glb', scene).then((result) => {
-    console.log(scene.meshes)
-    //   scene.meshes.forEach(mesh => {
-    //     mesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
-    //   })
+  const beforeMeshes = scene.meshes.slice();
+
+  BABYLON.SceneLoader.AppendAsync('/assets/models/', 'train.glb', scene).then(() => {
+    const newMeshes = scene.meshes.filter(m => !beforeMeshes.includes(m))
+
+    // Try to find the root node
+    const root = newMeshes.find(m => m.name === "__root__" || !m.parent)
+
+    if (root) {
+      root.scaling = new BABYLON.Vector3(0.01, 0.01, 0.01)
+    } else {
+      console.log("Could not find root mesh to scale")
+    }
   })
 
-  // Now return the scene normally
   return scene
 }
 
