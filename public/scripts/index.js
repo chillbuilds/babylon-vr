@@ -28,9 +28,9 @@ var createScene = function () {
   // Await model loading, but don't return the promise directly
   BABYLON.SceneLoader.AppendAsync('/assets/models/', 'train.glb', scene).then((result) => {
     console.log(scene.meshes)
-      scene.meshes.forEach(mesh => {
-        mesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
-      })
+    //   scene.meshes.forEach(mesh => {
+    //     mesh.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
+    //   })
   })
 
   // Now return the scene normally
