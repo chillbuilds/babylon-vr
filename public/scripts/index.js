@@ -52,7 +52,7 @@ var createScene = function () {
 
   scene = createScene()
 
-scene.createDefaultXRExperienceAsync({disableTeleportation: false}).then((xr) => {
+scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => {
   const xrCamera = xr.baseExperience.camera
   const speed = 0.05
   let inputAxes = { x: 0, y: 0 }
