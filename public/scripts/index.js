@@ -29,7 +29,6 @@ var createScene = function () {
   basePBR.roughness = 1.0
 
   var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 1, -3), scene)
-  camera.setTarget(new BABYLON.Vector3(0, 0, 0))
   camera.attachControl(canvas, true)
 
   var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene)
@@ -39,7 +38,7 @@ var createScene = function () {
 
     const model = meshes[0]
 
-    model.position = new BABYLON.Vector3(0, -50, 0)
+    model.position = new BABYLON.Vector3(0, -10, 0)
     model.scaling = new BABYLON.Vector3(.01, .01, .01)
     model.rotation = new BABYLON.Vector3(BABYLON.Tools.ToRadians(270), 0, 0)
 
@@ -53,12 +52,10 @@ var createScene = function () {
 
   scene = createScene()
 
-scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => {
+scene.createDefaultXRExperienceAsync({disableTeleportation: false}).then((xr) => {
   const xrCamera = xr.baseExperience.camera
   const speed = 0.05
   let inputAxes = { x: 0, y: 0 }
-
-  // Listen for controller input
 
   xr.input.onControllerAddedObservable.add((controller) => {
     controller.onMotionControllerInitObservable.add((motionController) => {
@@ -71,23 +68,6 @@ scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => 
       }
     })
   })
-
-  const trigger = motionController.getComponent("xr-standard-trigger");
-    if (trigger) {
-      trigger.onButtonStateChangedObservable.add(() => {
-        if (trigger.changes.pressed && trigger.pressed) {
-          const video = videoTexture.video;
-
-          video.muted = false;        // Ensure audio is on
-          video.autoplay = false;     // Just to be safe
-          video.play().catch((err) => {
-            alert("Could not play video:");
-          });
-        }
-      });
-    }else{
-        alert('no trigger')
-    }
 
   scene.onBeforeRenderObservable.add(() => {
     if (inputAxes.x !== 0 || inputAxes.y !== 0) {
