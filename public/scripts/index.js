@@ -40,40 +40,12 @@ var createScene = function () {
     const model = meshes[0]
 
     model.position = new BABYLON.Vector3(0, -50, 0)
-    model.scaling = new BABYLON.Vector3(.05, .05, .05)
+    model.scaling = new BABYLON.Vector3(.01, .01, .01)
     model.rotation = new BABYLON.Vector3(BABYLON.Tools.ToRadians(270), 0, 0)
 
     model.material = basePBR
   }
 )
-
-//   const screen = BABYLON.MeshBuilder.CreatePlane("videoScreen", {
-//     width: 8,
-//     height: 5 // 16:9 ratio
-//     }, scene)
-
-//   screen.position = new BABYLON.Vector3(0, 1, 10)
-//   screenMaterial = new BABYLON.StandardMaterial("screenMat", scene)
-  
-// //  videoTexture = new BABYLON.VideoTexture("video", videoUrl, scene, true, true, BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, {
-//     videoTexture = new BABYLON.VideoTexture("video", '../assets/videos/pinion.mp4', scene, true, true, BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, {
-//     autoUpdateTexture: true,
-//     poster: "", // optional preview image
-//     loop: true,
-//     autoplay: false
-//   })
-
-//   videoTexture.video.autoplay = false
-//   videoTexture.video.muted = false
-//   videoTexture.video.pause()
-
-//   videoTexture.uScale = 1;
-//   videoTexture.vScale = -1;
-
-//   screenMaterial.emissiveColor = new BABYLON.Color3(-0.36, -0.36, -0.36)
-
-//   screenMaterial.emissiveTexture = videoTexture;
-//   screen.material = screenMaterial;
 
   return scene
 }
@@ -90,9 +62,6 @@ scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => 
 
   xr.input.onControllerAddedObservable.add((controller) => {
     controller.onMotionControllerInitObservable.add((motionController) => {
-
-      console.log("Available components:", motionController.getComponentIds());
-
       const thumbstick = motionController.getComponent("xr-standard-thumbstick")
       if (thumbstick) {
         thumbstick.onAxisValueChangedObservable.add((axes) => {
@@ -118,27 +87,6 @@ scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => 
       });
     }else{
         alert('no trigger')
-    }
-
-    const aButton = motionController.getComponent("a-button");
-    if (aButton) {
-        aButton.onButtonStateChangedObservable.add(() => {
-            if (aButton.changes.pressed && aButton.pressed) {
-                fetch('/button-test')
-                    .then(response => {
-                        if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        // return response.text(); // or .json() if you expect JSON
-                    })
-                    .then(data => {
-                        console.log('GET /button-test response:', data);
-                    })
-                    .catch(error => {
-                        console.error('Fetch failed:', error);
-                });
-            }
-        });
     }
 
   scene.onBeforeRenderObservable.add(() => {
