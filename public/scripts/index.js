@@ -66,7 +66,7 @@ var createScene = function () {
 
 scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => {
   const xrCamera = xr.baseExperience.camera
-  const speed = 0.02
+  const speed = 0.05
   let inputAxes = { x: 0, y: 0 }
 
   xr.input.onControllerAddedObservable.add((controller) => {
