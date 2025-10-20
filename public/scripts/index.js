@@ -2,7 +2,6 @@ const videoUrl = 'https://flamingoflapjack.com/assets/videos/delta%20halo%203-08
 let videoTexture;
 let screenMaterial;
 
-alert('test')
 window.addEventListener('DOMContentLoaded', () => {
 
     BABYLON.WebXRSessionManager.IsSessionSupportedAsync('immersive-vr').then((supported) => {
@@ -23,55 +22,58 @@ window.addEventListener('DOMContentLoaded', () => {
 var createScene = function () {
   scene = new BABYLON.Scene(engine)
 
+  const basePBR = new BABYLON.PBRMaterial("basePBR", scene)
+
+  basePBR.albedoColor = new BABYLON.Color3(0.8, 0.8, 0.8)
+  basePBR.metallic = 0.0
+  basePBR.roughness = 1.0
+
   var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 1, -3), scene)
-//   camera.setTarget(new BABYLON.Vector3(0, 0, 0))
+  camera.setTarget(new BABYLON.Vector3(0, 0, 0))
   camera.attachControl(canvas, true)
 
   var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene)
   light.intensity = 0.7
 
-//   const beforeMeshes = scene.meshes.slice();
+  BABYLON.SceneLoader.ImportMesh(null, "../assets/models/nakagin/", "structure.obj", scene, function (meshes) {
 
-//   BABYLON.SceneLoader.AppendAsync('/assets/models/', 'train.glb', scene).then(() => {
-//     const newMeshes = scene.meshes.filter(m => !beforeMeshes.includes(m))
+    const model = meshes[0]
 
-//     // Try to find the root node
-//     const root = newMeshes.find(m => m.name === "__root__" || !m.parent)
+    model.position = new BABYLON.Vector3(0, -50, 0)
+    model.scaling = new BABYLON.Vector3(.05, .05, .05)
+    model.rotation = new BABYLON.Vector3(BABYLON.Tools.ToRadians(270), 0, 0)
 
-//     if (root) {
-//       root.scaling = new BABYLON.Vector3(0.01, 0.01, 0.01)
-//     } else {
-//       console.log("Could not find root mesh to scale")
-//     }
+    model.material = basePBR
+  }
+)
+
+//   const screen = BABYLON.MeshBuilder.CreatePlane("videoScreen", {
+//     width: 8,
+//     height: 5 // 16:9 ratio
+//     }, scene)
+
+//   screen.position = new BABYLON.Vector3(0, 1, 10)
+//   screenMaterial = new BABYLON.StandardMaterial("screenMat", scene)
+  
+// //  videoTexture = new BABYLON.VideoTexture("video", videoUrl, scene, true, true, BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, {
+//     videoTexture = new BABYLON.VideoTexture("video", '../assets/videos/pinion.mp4', scene, true, true, BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, {
+//     autoUpdateTexture: true,
+//     poster: "", // optional preview image
+//     loop: true,
+//     autoplay: false
 //   })
 
-  const screen = BABYLON.MeshBuilder.CreatePlane("videoScreen", {
-    width: 8,
-    height: 5 // 16:9 ratio
-    }, scene)
+//   videoTexture.video.autoplay = false
+//   videoTexture.video.muted = false
+//   videoTexture.video.pause()
 
-  screen.position = new BABYLON.Vector3(0, 1, 10)
-  screenMaterial = new BABYLON.StandardMaterial("screenMat", scene)
-  
-//  videoTexture = new BABYLON.VideoTexture("video", videoUrl, scene, true, true, BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, {
-    videoTexture = new BABYLON.VideoTexture("video", '../assets/videos/pinion.mp4', scene, true, true, BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, {
-    autoUpdateTexture: true,
-    poster: "", // optional preview image
-    loop: true,
-    autoplay: false
-  })
+//   videoTexture.uScale = 1;
+//   videoTexture.vScale = -1;
 
-  videoTexture.video.autoplay = false
-  videoTexture.video.muted = false
-  videoTexture.video.pause()
+//   screenMaterial.emissiveColor = new BABYLON.Color3(-0.36, -0.36, -0.36)
 
-  videoTexture.uScale = 1;
-  videoTexture.vScale = -1;
-
-  screenMaterial.emissiveColor = new BABYLON.Color3(-0.36, -0.36, -0.36)
-
-  screenMaterial.emissiveTexture = videoTexture;
-  screen.material = screenMaterial;
+//   screenMaterial.emissiveTexture = videoTexture;
+//   screen.material = screenMaterial;
 
   return scene
 }
@@ -85,8 +87,12 @@ scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => 
   let inputAxes = { x: 0, y: 0 }
 
   // Listen for controller input
+
   xr.input.onControllerAddedObservable.add((controller) => {
     controller.onMotionControllerInitObservable.add((motionController) => {
+
+      console.log("Available components:", motionController.getComponentIds());
+
       const thumbstick = motionController.getComponent("xr-standard-thumbstick")
       if (thumbstick) {
         thumbstick.onAxisValueChangedObservable.add((axes) => {
