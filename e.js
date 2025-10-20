@@ -10,6 +10,11 @@ const express = require('express')
         res.sendFile(path.join(__dirname, './public/index.html'))
     })
 
+    app.get('/button-test', (req, res) => {
+        console.log('button pushed')
+        res.sendStatus(200)
+    })
+
     app.post('/headset-position', (req, res) => {
         const position = req.body
         console.log(position)

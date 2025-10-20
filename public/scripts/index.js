@@ -114,6 +114,27 @@ scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => 
         alert('no trigger')
     }
 
+    const aButton = motionController.getComponent("a-button");
+    if (aButton) {
+        aButton.onButtonStateChangedObservable.add(() => {
+            if (aButton.changes.pressed && aButton.pressed) {
+                fetch('/button-test')
+                    .then(response => {
+                        if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        // return response.text(); // or .json() if you expect JSON
+                    })
+                    .then(data => {
+                        console.log('GET /button-test response:', data);
+                    })
+                    .catch(error => {
+                        console.error('Fetch failed:', error);
+                });
+            }
+        });
+    }
+
   scene.onBeforeRenderObservable.add(() => {
     if (inputAxes.x !== 0 || inputAxes.y !== 0) {
       const movement = new BABYLON.Vector3(
