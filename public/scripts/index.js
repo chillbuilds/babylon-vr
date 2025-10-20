@@ -1,6 +1,7 @@
 const videoUrl = 'https://flamingoflapjack.com/assets/videos/delta%20halo%203-08.mp4';
 let videoTexture;
 
+alert('test')
 window.addEventListener('DOMContentLoaded', () => {
 
     BABYLON.WebXRSessionManager.IsSessionSupportedAsync('immersive-vr').then((supported) => {
@@ -104,7 +105,7 @@ scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => 
           video.muted = false;        // Ensure audio is on
           video.autoplay = false;     // Just to be safe
           video.play().catch((err) => {
-            console.warn("Could not play video:", err);
+            alert("Could not play video:");
           });
         }
       });
