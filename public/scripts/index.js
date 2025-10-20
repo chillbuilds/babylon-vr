@@ -28,6 +28,20 @@ var createScene = function () {
   basePBR.metallic = 0.0
   basePBR.roughness = 1.0
 
+  const grayMetalPBR = new BABYLON.PBRMaterial("grayMetalPBR", scene)
+
+  grayMetalPBR.albedoColor = new BABYLON.Color3(0.2, 0.2, 0.2)
+  grayMetalPBR.metallic = 0.5
+  grayMetalPBR.roughness = 1.0
+
+  let formatModel = (model, pbr) => {
+    model.position = new BABYLON.Vector3(0, -10, 0)
+    model.scaling = new BABYLON.Vector3(.01, .01, .01)
+    model.rotation = new BABYLON.Vector3(BABYLON.Tools.ToRadians(270), 0, 0)
+
+    model.material = pbr
+  }
+
   var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 1, -3), scene)
   camera.attachControl(canvas, true)
 
@@ -35,16 +49,14 @@ var createScene = function () {
   light.intensity = 0.7
 
   BABYLON.SceneLoader.ImportMesh(null, "../assets/models/nakagin/", "structure.obj", scene, function (meshes) {
-
-    const model = meshes[0]
-
-    model.position = new BABYLON.Vector3(0, -10, 0)
-    model.scaling = new BABYLON.Vector3(.01, .01, .01)
-    model.rotation = new BABYLON.Vector3(BABYLON.Tools.ToRadians(270), 0, 0)
-
-    model.material = basePBR
-  }
-)
+    formatModel(meshes[0], basePBR)
+  })
+  BABYLON.SceneLoader.ImportMesh(null, "../assets/models/nakagin/", "bathroom-floor.obj", scene, function (meshes) {
+    formatModel(meshes[0], basePBR)
+  })
+  BABYLON.SceneLoader.ImportMesh(null, "../assets/models/nakagin/", "door-frame.obj", scene, function (meshes) {
+    formatModel(meshes[0], grayMetalPBR)
+  })
 
   return scene
 }
@@ -54,7 +66,7 @@ var createScene = function () {
 
 scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => {
   const xrCamera = xr.baseExperience.camera
-  const speed = 0.05
+  const speed = 0.02
   let inputAxes = { x: 0, y: 0 }
 
   xr.input.onControllerAddedObservable.add((controller) => {
