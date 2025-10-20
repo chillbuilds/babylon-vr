@@ -1,4 +1,5 @@
 const videoUrl = 'https://flamingoflapjack.com/assets/videos/delta%20halo%203-08.mp4';
+let videoTexture;
 
 window.addEventListener('DOMContentLoaded', () => {
 
@@ -50,8 +51,8 @@ var createScene = function () {
   screen.position = new BABYLON.Vector3(0, 1, 10)
   const screenMaterial = new BABYLON.StandardMaterial("screenMat", scene)
   
-//   const videoTexture = new BABYLON.VideoTexture("video", videoUrl, scene, true, true, BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, {
-  const videoTexture = new BABYLON.VideoTexture("video", '../assets/videos/pinion.mp4', scene, true, true, BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, {
+//  videoTexture = new BABYLON.VideoTexture("video", videoUrl, scene, true, true, BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, {
+    videoTexture = new BABYLON.VideoTexture("video", '../assets/videos/pinion.mp4', scene, true, true, BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE, {
     autoUpdateTexture: true,
     poster: "", // optional preview image
     loop: true,
