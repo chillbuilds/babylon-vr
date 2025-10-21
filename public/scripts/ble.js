@@ -1,4 +1,6 @@
-async function connectBLE() {
+window.addEventListener('DOMContentLoaded', () => {
+
+$('#connectBtn').on('click', async function() {
   try {
     const device = await navigator.bluetooth.requestDevice({
       filters: [{ services: ['12345678-1234-1234-1234-123456789abc'] }]
@@ -24,4 +26,6 @@ async function connectBLE() {
   } catch (error) {
     console.error('BLE Error:', error);
   }
-}
+})
+
+})
