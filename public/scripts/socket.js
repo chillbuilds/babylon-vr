@@ -1,6 +1,7 @@
-const socket = new WebSocket("ws://10.0.0.17:81")
+try {
+    const socket = new WebSocket("ws://10.0.0.17:81")
     socket.onopen = () => {
-      console.log('connected')
+        $('#message').text(event.data)
     }
 
     socket.onmessage = (event) => {
@@ -16,6 +17,11 @@ const socket = new WebSocket("ws://10.0.0.17:81")
         $('#message').text("WebSocket error:", error)
     }
 
-    function sendMessage() {
-        socket.send('test')
+    function sendMessage(msg) {
+        socket.send(msg)
     }
+
+    sendMessage('test')
+} catch (error) {
+    $('#message').text(JSON.stringify(error))
+}
