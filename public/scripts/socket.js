@@ -1,33 +1,36 @@
+let x = 0
+
 window.addEventListener('DOMContentLoaded', () => {
-    $('#message').text('test')
+  $('#message').text('Trying to connect...')
 
-try {
-    const socket = new WebSocket("ws://10.0.0.17:81")
-
-    function sendMessage(msg) {
-        socket.send(msg)
-    }
+  try {
+    const socket = new WebSocket('wss://render-socket-service.onrender.com')
 
     socket.onopen = () => {
-        $('#message').text('connected')
-        sendMessage('test')
+      $('#message').text('✅ Connected to WebSocket')
+      socket.send('test')
+
+      $('#connectBtn').on('click', () => {
+        socket.send('test ' + x)
+        x++
+    })
     }
 
     socket.onmessage = (event) => {
-        $('#message').text(event.data)
+      $('#message').text('📩 ' + event.data)
     }
 
     socket.onclose = (event) => {
-        $('#message').text("ESP32 socket connection closed:", event)
-    // Handle reconnect logic or UI feedback here
+      $('#message').text('❌ Connection closed: ' + event.reason || event.code)
     }
 
     socket.onerror = (error) => {
-        $('#message').text("WebSocket error:", error)
+      console.error('WebSocket error:', error)
+      $('#message').text('⚠️ WebSocket error – check console')
     }
 
-} catch (error) {
-    $('#message').text(JSON.stringify(error))
-}
-
+  } catch (error) {
+    console.error('Connection error:', error)
+    $('#message').text('❌ Exception: ' + error.message)
+  }
 })
