@@ -10,7 +10,7 @@ window.addEventListener('DOMContentLoaded', () => {
             // $('#babylonCanvas').attr('style', 'display: inline-block;')
         } else {
             console.log("🚫 XR headset NOT supported")
-            $('#message').text('get a dang headset')
+            // $('#message').text('get a dang headset')
         }
     })
 

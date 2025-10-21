@@ -1,7 +1,16 @@
+window.addEventListener('DOMContentLoaded', () => {
+    $('#message').text('test')
+
 try {
     const socket = new WebSocket("ws://10.0.0.17:81")
+
+    function sendMessage(msg) {
+        socket.send(msg)
+    }
+
     socket.onopen = () => {
-        $('#message').text(event.data)
+        $('#message').text('connected')
+        sendMessage('test')
     }
 
     socket.onmessage = (event) => {
@@ -17,11 +26,8 @@ try {
         $('#message').text("WebSocket error:", error)
     }
 
-    function sendMessage(msg) {
-        socket.send(msg)
-    }
-
-    sendMessage('test')
 } catch (error) {
     $('#message').text(JSON.stringify(error))
 }
+
+})
