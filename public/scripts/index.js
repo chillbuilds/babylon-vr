@@ -70,13 +70,16 @@ scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => 
 
   xr.input.onControllerAddedObservable.add((controller) => {
     controller.onMotionControllerInitObservable.add((motionController) => {
-      $('#message').text(JSON.stringify(motionController.getComponentIds()))
       const thumbstick = motionController.getComponent("xr-standard-thumbstick")
       if (thumbstick) {
         thumbstick.onAxisValueChangedObservable.add((axes) => {
           inputAxes.x = axes.x // left/right
           inputAxes.y = axes.y // forward/back
         })
+      }
+      const trigger = motionController.getComponent('xr-standard-trigger')
+      if(trigger.value >= 0.9){
+        $('#message').text('trigger-pulled')
       }
     })
   })
