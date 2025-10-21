@@ -73,8 +73,8 @@ xr.input.onControllerAddedObservable.add((controller) => {
     const thumbstick = motionController.getComponent("xr-standard-thumbstick")
     if (thumbstick) {
       thumbstick.onAxisValueChangedObservable.add((axes) => {
-        inputAxes.x = axes.x // left/right
-        inputAxes.y = axes.y // forward/back
+        inputAxes.x = axes.x
+        inputAxes.y = axes.y
       })
     }
 
@@ -82,7 +82,7 @@ xr.input.onControllerAddedObservable.add((controller) => {
     if (trigger) {
       trigger.onButtonStateChangedObservable.add(() => {
         if (trigger.value >= 0.9) {
-          $('#message').text('trigger-pulled')
+            socket.send('trigger pulled')
         }
       })
     }
@@ -91,7 +91,7 @@ xr.input.onControllerAddedObservable.add((controller) => {
     if (aBtn) {
       aBtn.onButtonStateChangedObservable.add(() => {
         if (aBtn.pressed) {
-          $('#message').text('a button pressed')
+            socket.send('a-button pressed')
         }
       })
     }
