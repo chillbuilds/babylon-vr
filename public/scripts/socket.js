@@ -1,10 +1,8 @@
 let x = 0
+const socket = new WebSocket('wss://render-socket-service.onrender.com')
 
 window.addEventListener('DOMContentLoaded', () => {
   $('#message').text('Trying to connect...')
-
-  try {
-    const socket = new WebSocket('wss://render-socket-service.onrender.com')
 
     socket.onopen = () => {
       $('#message').text('✅ Connected to WebSocket')
@@ -28,9 +26,4 @@ window.addEventListener('DOMContentLoaded', () => {
       console.error('WebSocket error:', error)
       $('#message').text('⚠️ WebSocket error – check console')
     }
-
-  } catch (error) {
-    console.error('Connection error:', error)
-    $('#message').text('❌ Exception: ' + error.message)
-  }
 })

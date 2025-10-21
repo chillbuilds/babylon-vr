@@ -1,13 +1,13 @@
-const videoUrl = 'https://flamingoflapjack.com/assets/videos/delta%20halo%203-08.mp4';
-let videoTexture;
-let screenMaterial;
+const videoUrl = 'https://flamingoflapjack.com/assets/videos/delta%20halo%203-08.mp4'
+let videoTexture
+let screenMaterial
 
 window.addEventListener('DOMContentLoaded', () => {
 
     BABYLON.WebXRSessionManager.IsSessionSupportedAsync('immersive-vr').then((supported) => {
         if (supported) {
             console.log("✅ XR headset is supported on this device")
-            // $('#babylonCanvas').attr('style', 'display: inline-block;')
+            // $('#babylonCanvas').attr('style', 'display: inline-block')
         } else {
             console.log("🚫 XR headset NOT supported")
             // $('#message').text('get a dang headset')
@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const canvas = document.getElementById('babylonCanvas')
   const engine = new BABYLON.Engine(canvas, true)
-  let scene;
+  let scene
 
 var createScene = function () {
   scene = new BABYLON.Scene(engine)
@@ -68,21 +68,36 @@ scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => 
   const speed = 0.05
   let inputAxes = { x: 0, y: 0 }
 
-  xr.input.onControllerAddedObservable.add((controller) => {
-    controller.onMotionControllerInitObservable.add((motionController) => {
-      const thumbstick = motionController.getComponent("xr-standard-thumbstick")
-      if (thumbstick) {
-        thumbstick.onAxisValueChangedObservable.add((axes) => {
-          inputAxes.x = axes.x // left/right
-          inputAxes.y = axes.y // forward/back
-        })
-      }
-      const trigger = motionController.getComponent('xr-standard-trigger')
-      if(trigger.value >= 0.9){
-        $('#message').text('trigger-pulled')
-      }
-    })
+xr.input.onControllerAddedObservable.add((controller) => {
+  controller.onMotionControllerInitObservable.add((motionController) => {
+    const thumbstick = motionController.getComponent("xr-standard-thumbstick")
+    if (thumbstick) {
+      thumbstick.onAxisValueChangedObservable.add((axes) => {
+        inputAxes.x = axes.x // left/right
+        inputAxes.y = axes.y // forward/back
+      })
+    }
+
+    const trigger = motionController.getComponent("xr-standard-trigger")
+    if (trigger) {
+      trigger.onButtonStateChangedObservable.add(() => {
+        if (trigger.value >= 0.9) {
+          $('#message').text('trigger-pulled')
+        }
+      })
+    }
+
+    const aBtn = motionController.getComponent("a-button")
+    if (aBtn) {
+      aBtn.onButtonStateChangedObservable.add(() => {
+        if (aBtn.pressed) {
+          $('#message').text('a button pressed')
+        }
+      })
+    }
   })
+})
+
 
   scene.onBeforeRenderObservable.add(() => {
     if (inputAxes.x !== 0 || inputAxes.y !== 0) {
