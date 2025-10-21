@@ -4,21 +4,15 @@ let screenMaterial;
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    $('#message').text('test')
-
     BABYLON.WebXRSessionManager.IsSessionSupportedAsync('immersive-vr').then((supported) => {
         if (supported) {
             console.log("✅ XR headset is supported on this device")
             // $('#babylonCanvas').attr('style', 'display: inline-block;')
         } else {
             console.log("🚫 XR headset NOT supported")
-            // $('#message').text('get a dang headset')
+            $('#message').text('get a dang headset')
         }
     })
-
-    $('#message').text('test')
-
-
 
   const canvas = document.getElementById('babylonCanvas')
   const engine = new BABYLON.Engine(canvas, true)
@@ -76,6 +70,7 @@ scene.createDefaultXRExperienceAsync({disableTeleportation: true}).then((xr) => 
 
   xr.input.onControllerAddedObservable.add((controller) => {
     controller.onMotionControllerInitObservable.add((motionController) => {
+      $('#message').text(JSON.stringify(motionController.getComponentIds()))
       const thumbstick = motionController.getComponent("xr-standard-thumbstick")
       if (thumbstick) {
         thumbstick.onAxisValueChangedObservable.add((axes) => {
