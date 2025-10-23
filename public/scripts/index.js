@@ -81,7 +81,7 @@ xr.input.onControllerAddedObservable.add((controller) => {
     const trigger = motionController.getComponent("xr-standard-trigger")
     if (trigger) {
       trigger.onButtonStateChangedObservable.add(() => {
-        if (trigger.value >= 0.9) {
+        if (trigger.value >= 0.8) {
             socket.send('trigger pulled')
         }
       })
