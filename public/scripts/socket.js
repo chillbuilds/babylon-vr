@@ -2,7 +2,6 @@ let deviceInfo = {device_type: 'browser', device_name: 'babylon-vr', description
 
 let x = 0
 const socket = new WebSocket('wss://render-socket-service.onrender.com')
-// const socket = new WebSocket('wss://10.0.0.17:443')
 // const socket = new WebSocket('ws://10.0.0.88:10000')
 
 
