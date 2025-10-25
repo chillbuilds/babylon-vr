@@ -2,6 +2,12 @@ const videoUrl = 'https://flamingoflapjack.com/assets/videos/delta%20halo%203-08
 let videoTexture
 let screenMaterial
 
+let renderEdges = (mesh) => {
+  mesh.enableEdgesRendering()
+  mesh.edgesWidth = 4.0
+  mesh.edgesColor = new BABYLON.Color4(0, 0, 0, 0.2)
+}
+
 window.addEventListener('DOMContentLoaded', () => {
 
     BABYLON.WebXRSessionManager.IsSessionSupportedAsync('immersive-vr').then((supported) => {
@@ -21,7 +27,7 @@ window.addEventListener('DOMContentLoaded', () => {
 var createScene = function () {
   scene = new BABYLON.Scene(engine)
 
-  scene.clearColor = BABYLON.Color3.FromHexString("#2364AA");
+  scene.clearColor = BABYLON.Color3.FromHexString("#2364AA"); // background color
 
   var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 1, -3), scene)
   camera.attachControl(canvas, true)
@@ -31,17 +37,17 @@ var createScene = function () {
   light.intensity = 1
 
   const basePBR = new BABYLON.PBRMaterial("basePBR", scene)
-  basePBR.albedoColor = BABYLON.Color3.FromHexString("#FFFFFF");
+  basePBR.emissiveColor = new BABYLON.Color3(0.2, 0.2, 0.2)
   basePBR.metallic = 0.0
   basePBR.roughness = 1.0
 
   const grayMetalPBR = new BABYLON.PBRMaterial("grayMetalPBR", scene)
-  grayMetalPBR.albedoColor = new BABYLON.Color3(0.2, 0.2, 0.2)
+  grayMetalPBR.albedoColor = new BABYLON.Color3(0.4, 0.4, 0.4)
   grayMetalPBR.metallic = 0.5
   grayMetalPBR.roughness = 1.0
 
   const lightGrayMetalPBR = new BABYLON.PBRMaterial("lightGrayMetalPBR", scene)
-  lightGrayMetalPBR.albedoColor = new BABYLON.Color3(0.4, 0.4, 0.4)
+  lightGrayMetalPBR.albedoColor = new BABYLON.Color3(0.6, 0.6, 0.6)
   lightGrayMetalPBR.metallic = 0.8
   lightGrayMetalPBR.roughness = 0.8
 
@@ -92,6 +98,7 @@ var createScene = function () {
   modelPaths.forEach(model => {
     BABYLON.SceneLoader.ImportMesh(null, "../assets/models/nakagin/", model, scene, function (meshes) {
       formatModel(meshes[0], basePBR)
+      renderEdges(meshes[0])
     })
   })
 
@@ -120,6 +127,7 @@ var createScene = function () {
   })
   BABYLON.SceneLoader.ImportMesh(null, "../assets/models/nakagin/", "door-frame.obj", scene, function (meshes) {
     formatModel(meshes[0], grayMetalPBR)
+    renderEdges(meshes[0])
   })
   BABYLON.SceneLoader.ImportMesh(null, "../assets/models/nakagin/", "bathroom-floor.obj", scene, function (meshes) {
     formatModel(meshes[0], bathroomFloorPBR)
